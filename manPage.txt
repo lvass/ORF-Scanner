@@ -1,0 +1,54 @@
+
+NAME
+OrfScanner - finds non-nested open reading frames (ORFs) in a nucleotide sequence supplied in FASTA format. Outputs these ORFs as translated amino acid sequences.
+
+
+SYNOPSIS
+python3 orfScanner.py -f filename [-r] [-o] [-c] 
+
+
+DESCRIPTION
+This program takes a nucleotide (ATGC) FASTA file and translates it into an amino acid sequences in all 6 reading frames. The input file can be any type but must be in FASTA formatted nucleotide sequence (see https://zhanglab.ccmb.med.umich.edu/FASTA/ for more information on FASTA format). 
+
+It then searches for open reading frames (ORFs) in all 6 frames; 3 forward, 3 reverse.
+
+ORFs are defined as a region between an ‘ATG’ codon (which translates to methionine) and a stop codon (either TGA, TAA or TAG). The program will take the longest, non-nested ORF only.
+For example the program will take:
+M---M----STOP
+Not:
+M--------STOP and M----STOP
+
+A stop codon will never be missed. Overlapping ORFs in different reading frames are allowed. The user can specify the minimum ORF length in amino acids. The default value is 100 and the minimum value is 2. 
+
+The program outputs the ORFs into a .fasta file. The output contains information about the ORF followed by the sequence:
+>Sequence_Name #_#_#
+Where:
+Sequence_Name: first line of the FASTA formatted input file.
+1st number: reading frame the ORF is from (minus numbers represent the reverse strand).
+2nd number: number of ORF found in the frame.
+3rd number: position of the 1st amino acid of the ORF in the translated amino acid sequence. 
+For example:
+>I.claudius complete genome sequence -2_1_284
+MNKLRQKYLQKWLRAQQEPIKKLMMRANIVLATLSSFIL … etc 
+
+
+OPTIONS
+-f --inputfile
+The name of the fasta format file containing the nucleotide sequence in which to search. At least 1 input file must be supplied. Multiple input files should be listed with a space between file names.
+-o --output
+Identify the name and extension of the output file. If multiple fasta files are supplied to the program (using -f), then the output files will begin with a number. Default is ‘orfs.fasta’.
+-r --readingframe [1],[2],[3],[-1],[-2],[-3]
+Limits the ORF search to just one reading frame: 1, 2, 3, -1, -2 or -3. Default is all reading frames.
+-c --cutoff
+Sets the minimum length of ORF returned (length in amino acids).
+Must be >2. Default is 100.
+
+
+BUGS
+No known bugs. 
+
+
+AUTHOR
+Lucy Vass, University of Manchester, UK. lucy.vass@postgrad.manchester.ac.uk
+
+
